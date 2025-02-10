@@ -6,11 +6,18 @@ import json
 GEMINI_API_KEY = "AIzaSyAFJYqU0SENf15D29ZAtPPP914XMPVHbnk"
 GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent"
 
-def generate_email(prompt):
+# Categories for the dropdown menu
+CATEGORIES = [
+    "Business", "Deals", "Events", "For Sale", "IT/Tech", "Classified", "Jobs",
+    "Property", "Resort/Travel", "Services", "Vehicle", "Investment"
+]
+
+def generate_email(category, prompt):
+    full_prompt = f"Write a promotional email for the '{category}' category. {prompt}"
     headers = {"Content-Type": "application/json"}
     params = {"key": GEMINI_API_KEY}
     data = {
-        "contents": [{"parts": [{"text": prompt}]}]
+        "contents": [{"parts": [{"text": full_prompt}]}]
     }
     
     response = requests.post(GEMINI_API_URL, headers=headers, params=params, json=data)
@@ -21,15 +28,18 @@ def generate_email(prompt):
         return f"Error: {response.status_code} - {response.text}"
 
 # Streamlit UI
-st.title("WWA Email Writer")
+st.title("AI Promotional Email Generator")
+
+# Dropdown menu for categories
+category = st.selectbox("Select a category:", CATEGORIES)
 
 # User input
-prompt = st.text_area("Enter your email prompt:", "Write a professional email for a job application.")
+prompt = st.text_area("Enter email details:", "Write a promotional email for a new product.")
 
 if st.button("Generate Email"):
     if prompt.strip():
-        email_content = generate_email(prompt)
-        st.subheader("Generated Email:")
+        email_content = generate_email(category, prompt)
+        st.subheader("Generated Promotional Email:")
         st.write(email_content)
     else:
         st.error("Please enter a valid prompt.")
