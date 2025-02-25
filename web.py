@@ -14,6 +14,7 @@ CATEGORIES = [
     "Business", "Deals", "Events", "For Sale", "IT/Tech", "Classified", "Jobs",
     "Property", "Resort/Travel", "Services", "Vehicle", "Investment"
 ]
+ACCESS_CODE = "WWA987@"
 
 def send_email(sender_email, sender_password, smtp_server, smtp_port, recipient_email, subject, message):
     try:
@@ -51,38 +52,49 @@ def generate_email(category, prompt):
 
 st.title("WWA AI Email Generator & Sender")
 
-# Dropdown menu for categories
-category = st.selectbox("Select a category:", CATEGORIES)
+# Access code input
+user_code = st.text_input("Enter access code to unlock additional functionality:", type="password")
 
-# User input
-prompt = st.text_area("Enter email details:", "Write a promotional email for a new product.")
-recipient_email = st.text_input("Recipient Email")
-subject = st.text_input("Email Subject")
+if user_code == ACCESS_CODE:
+    st.success("Access granted!")
 
-# Hostinger SMTP Details
-smtp_server = "smtp.hostinger.com"
-smtp_port = 587
-sender_email = "blog@worldwideadverts.info"
-sender_password = "Madaz[33-77]"
+    # Dropdown menu for categories
+    category = st.selectbox("Select a category:", CATEGORIES)
+
+    # User input
+    prompt = st.text_area("Enter email details:", "Write a promotional email for a new product.")
+    recipient_email = st.text_input("Recipient Email")
+    subject = st.text_input("Email Subject")
+
+    # Hostinger SMTP Details
+    smtp_server = "smtp.hostinger.com"
+    smtp_port = 587
+    sender_email = "blog@worldwideadverts.info"
+    sender_password = "Madaz[33-77]"
 
 # Placeholder for generated email
-message = ""
+    message = ""
 
-if st.button("Generate Email"):
-    if prompt.strip():
-        message = generate_email(category, prompt)
-        st.session_state["generated_email"] = message  # Store in session state
-        st.subheader("Generated Promotional Email:")
-        st.write(message)
-    else:
-        st.error("Please enter a valid prompt.")
+    if st.button("Generate Email"):
+        if prompt.strip():
+            message = generate_email(category, prompt)
+            st.session_state["generated_email"] = message  # Store in session state
+            st.subheader("Generated Promotional Email:")
+            st.write(message)
+        else:
+            st.error("Please enter a valid prompt.")
 
-if "generated_email" in st.session_state:
-    message = st.session_state["generated_email"]
+    if "generated_email" in st.session_state:
+     message = st.session_state["generated_email"]
 
-if st.button("Send Email"):
-    if recipient_email and subject and message:
+    if st.button("Send Email"):
+        if recipient_email and subject and message:
         result = send_email(sender_email, sender_password, smtp_server, smtp_port, recipient_email, subject, message)
         st.success(result)
     else:
         st.error("Please fill in all email fields before sending.")
+     else:
+            st.error("Please enter both a topic and a keyword.")
+    else:
+        st.warning("Enter the correct access code to unlock blog generation.")
+
