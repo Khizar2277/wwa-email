@@ -72,7 +72,7 @@ if user_code == ACCESS_CODE:
     sender_email = "blog@worldwideadverts.info"
     sender_password = "Madaz[33-77]"
 
-# Placeholder for generated email
+    # Placeholder for generated email
     message = ""
 
     if st.button("Generate Email"):
@@ -85,16 +85,13 @@ if user_code == ACCESS_CODE:
             st.error("Please enter a valid prompt.")
 
     if "generated_email" in st.session_state:
-     message = st.session_state["generated_email"]
+        message = st.session_state["generated_email"]
 
     if st.button("Send Email"):
         if recipient_email and subject and message:
-        result = send_email(sender_email, sender_password, smtp_server, smtp_port, recipient_email, subject, message)
-        st.success(result)
-    else:
-        st.error("Please fill in all email fields before sending.")
-     else:
-            st.error("Please enter both a topic and a keyword.")
-    else:
-        st.warning("Enter the correct access code to unlock blog generation.")
-
+            result = send_email(sender_email, sender_password, smtp_server, smtp_port, recipient_email, subject, message)
+            st.success(result)
+        else:
+            st.error("Please fill in all email fields before sending.")
+else:
+    st.warning("Enter the correct access code to unlock blog generation.")
